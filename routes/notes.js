@@ -52,6 +52,7 @@ router.post("/", async function(req,res,next) {
     let title = formData['title'];
     await addNotes(req.db, formData);
     console.log(`added ${title} succeed`);
+    res.redirect('/notes');
     // res.send
   } catch(err) {
     console.log(err);

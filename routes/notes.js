@@ -24,7 +24,7 @@ router.get('/', async function(req, res, next ){
     let notes = await getNotes(req.db);
     console.log('Here are the notes');
     console.log(notes);
-    res.send(notes);
+    res.render('notes',{title: 'This is note',todolist : notes});
   } catch (err) {
     console.log(err);
   }
@@ -32,8 +32,8 @@ router.get('/', async function(req, res, next ){
 
 function addNotes(db, data) {
   return new Promise((rs, rj) => {
-    let sql = 'INSERT INTO `item`(`title`) VALUES (?)';
-    let params = [data['title']];
+    let sql = 'INSERT INTO `item`(`title`,`description`) VALUES (?,?)';
+    let params = [data['title'],data['description']];
     db.query(sql, params, (err, result) => {
       if (err) {
         console.log("[INSERT ERROR] -", err);
@@ -49,8 +49,10 @@ router.post("/", async function(req,res,next) {
   try{
     let formData = req.body;
     console.log(formData);
+    let title = formData['title'];
     await addNotes(req.db, formData);
-    res.send("data added");
+    console.log(`added ${title} succeed`);
+    // res.send
   } catch(err) {
     console.log(err);
     res.send(err);

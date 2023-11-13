@@ -3,9 +3,36 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="container">
+      <h1 class="display-4 text-center py-1">Hello, TODO</H1>
+      <!-- input area -->
+      <div class="jumbotron p-3 shadow-sm">
+          <form action="/notes" method="POST">
+              <div class="d-flex align-items-center">
+                  <input autofocus autocomplete="off" class="form-control mr-3" name="title" type="text" style="flex: 1;">
+                  <input autofocus autocomplete="off" class="form-control mr-3" name="description" type="text" style="flex: 1;">
+                  <button class="btn btn-primary">新增項目</button>
+              </div>
+          </form>
+      </div>
+      <!-- // input area -->
+      <!-- list area -->
+      <ul class="list-group pb-5">
+        <p>123</p>
+        <% for(var i = 0; i < todolist.length; i++) { %>
+          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+            <span class="item-text"><%= todolist[i].title %></span>
+            <div>
+                <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+              <button class="delete-me btn btn-danger btn-sm">Delete</button>
+            </div>
+          </li>
+        <% } %>
+        </ul>
+      <!-- //list area -->
+      </div>
   </body>
 </html>

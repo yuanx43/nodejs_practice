@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
+// create
 function getNotes(db) {
   return new Promise((rs,rj) => {
     let sql = 'Select * from item';
@@ -30,6 +31,7 @@ router.get('/', async function(req, res, next ){
   }
 })
 
+// read
 function addNotes(db, data) {
   return new Promise((rs, rj) => {
     let sql = 'INSERT INTO `item`(`title`,`description`) VALUES (?,?)';
@@ -54,6 +56,37 @@ router.post("/", async function(req,res,next) {
     console.log(`added ${title} succeed`);
     res.redirect('/notes');
     // res.send
+  } catch(err) {
+    console.log(err);
+    res.send(err);
+  }
+})
+
+// update
+function updateNote(db, id, description) {
+  return new Promise((rs,rj) =>{
+    let sql = 'UPDATE `item` SET `title`="updateTitle",`description`=?,`time` = CURRENT_TIMESTAMP WHERE id =?';
+    let params = [description,id];
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        console.log("[UPDATE ERROR] -", err);
+        rj(err);
+      } else {
+        rs('OK');
+      }
+    })
+  })
+}
+
+router.patch("/edit", async function(req,res,next){
+  let formData = req.body;
+  console.log("f=",formData);
+  try{
+    let id = formData['id'];
+    let description = formData['description'];
+    await updateNote(req.db,id,description);
+    console.log(description,id);
+    res.send(formData);
   } catch(err) {
     console.log(err);
     res.send(err);

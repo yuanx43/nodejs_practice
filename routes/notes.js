@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 
-// create
+// read
 function getNotes(db) {
   return new Promise((rs,rj) => {
     let sql = 'Select * from item';
@@ -31,7 +31,7 @@ router.get('/', async function(req, res, next ){
   }
 })
 
-// read
+// create
 function addNotes(db, data) {
   return new Promise((rs, rj) => {
     let sql = 'INSERT INTO `item`(`title`,`description`) VALUES (?,?)';
@@ -62,11 +62,46 @@ router.post("/", async function(req,res,next) {
   }
 })
 
+//get one
+function getSelected(db, id) {
+  return new Promise((rs, rj) => {
+    let sql = 'SELECT * FROM `item` WHERE id = ?';
+    let params = [id];
+    db.query(sql, params, (err, rows) => {
+      if (err) {
+        console.log("[SELECT ERROR] -", err);
+        rj(err);
+      } else {
+        if (rows.length == 0) {
+          rj('No data');
+        } else {
+          rs(rows);
+        }
+      }
+    })
+  })
+}
+
+router.get("/edit/:id", async function(req,res,next){
+  let note_id = req.params.id;
+  console.log(note_id);
+  try{
+    let result = await getSelected(req.db, note_id);
+    // console.log(...result);
+    res.render("edit", { title: "Edit", note: result});
+  } catch(err) {
+    console.log(err);
+    res.send(err);
+  }
+})
+
+
+
 // update
-function updateNote(db, id, description) {
+function updateNote(db, id,title, description) {
   return new Promise((rs,rj) =>{
-    let sql = 'UPDATE `item` SET `title`="updateTitle",`description`=?,`time` = CURRENT_TIMESTAMP WHERE id =?';
-    let params = [description,id];
+    let sql = 'UPDATE `item` SET `title`=?,`description`=?,`time` = CURRENT_TIMESTAMP WHERE id =?';
+    let params = [title,description,id];
     db.query(sql, params, (err, result) => {
       if (err) {
         console.log("[UPDATE ERROR] -", err);
@@ -78,15 +113,16 @@ function updateNote(db, id, description) {
   })
 }
 
-router.patch("/edit", async function(req,res,next){
+router.post("/edit/:id", async function(req,res,next){
+  let note_id = req.params.id;
   let formData = req.body;
   console.log("f=",formData);
-  try{
-    let id = formData['id'];
+  try{ 
+    let title = formData['title'];
     let description = formData['description'];
-    await updateNote(req.db,id,description);
-    console.log(description,id);
-    res.send(formData);
+    await updateNote(req.db,note_id,title,description);
+    console.log(description,note_id);
+    res.redirect("/notes");
   } catch(err) {
     console.log(err);
     res.send(err);

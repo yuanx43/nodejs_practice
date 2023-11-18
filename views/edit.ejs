@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="display-4 text-center py-1">Hello, TODO</H1>
+      <!-- input area -->
+      <div class="jumbotron p-3 shadow-sm">
+          <form action="/notes/edit/<%= note[0].id %>" method="POST">
+              <div class="d-flex align-items-center">
+                  <input autofocus autocomplete="off" class="form-control mr-3" name="title" type="text" style="flex: 1;" value="<%= note[0].title %>">
+                  <input autofocus autocomplete="off" class="form-control mr-3" name="description" type="text" style="flex: 1;" value="<%- note[0].description %>">
+                  <button class="btn btn-primary">新增項目</button>
+              </div>
+          </form>
+    <script src="/javascripts/notes.js"></script>
+  </body>
+</html>

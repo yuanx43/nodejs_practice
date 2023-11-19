@@ -60,3 +60,32 @@
 //             console.log(`Error: ${error}`);
 //         })
 // }
+
+function deleteNote(notes_id) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var body = JSON.stringify({
+        "id": notes_id,
+    });
+    var requestOptions = {
+        method: 'DELETE',
+        headers: myHeaders,
+        // body: body,
+        // redirect: 'follow'
+    };
+    console.log("deleting");
+
+    fetch('/notes/'+notes_id,requestOptions)
+        .then((response) => {
+            if (response.redirected) {
+                window.location.href = '/notes'; 
+                console.log("redirected");
+              // creates the second request, and change the content
+                return;
+              }
+        })
+        .catch((error) => {
+            console.log(`Error: ${error}`);
+        })
+    console.log("finish");
+}

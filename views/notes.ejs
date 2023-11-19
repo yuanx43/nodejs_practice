@@ -27,7 +27,7 @@
             <span class="item-text"><%= todolist[i].description %></span>
             <div>
               <button class="editBtn btn btn-secondary btn-sm mr-1" onclick="location.href='notes/edit/<%= todolist[i].id %>'">Edit</button>
-              <button class="delete-me btn btn-danger btn-sm" onclick="DeleteNote()">Delete</button>
+              <button class="delete-me btn btn-danger btn-sm" onclick="deleteNote(<%= todolist[i].id %>)">Delete</button>
             </div>
           </li>
         <% } %>

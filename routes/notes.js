@@ -129,5 +129,37 @@ router.post("/edit/:id", async function(req,res,next){
   }
 })
 
+// delete
+function deleteNote(db,id) {
+  return new Promise((rs,rj)=> {
+    let sql = 'DELETE FROM `item` WHERE id = ?';
+    let params = [id];
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        console.log("[DELETE ERROR] -", err);
+        rj(err);
+      } else {
+        rs('OK');
+      }
+    })
+  })
+}
+
+router.delete('/:id', async function(req, res, next) {
+  let formData = req.body;
+  let id = req.params.id;
+  try {
+    let notes_id = formData['id'];
+    let result = await deleteNote(req.db,id);
+    console.log(`deleted ${id} successed`);
+    console.log(result);
+    // res.send(result);
+    res.redirect('/notes');
+  } catch(err) {
+    console.log(err);
+    rs.send(err);
+  }
+})
+
 
 module.exports = router;
